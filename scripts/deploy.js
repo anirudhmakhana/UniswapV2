@@ -110,6 +110,11 @@ async function main() {
   const token0Amount = ethers.parseUnits("100");
   const token1Amount = ethers.parseUnits("100");
 
+  const lpTokenBalanceBefore = await pair.balanceOf(owner.address);
+  console.log(
+    `LP tokens for the owner before: ${lpTokenBalanceBefore.toString()}`
+  );
+
   const deadline = Math.floor(Date.now() / 1000) + 10 * 60;
   const addLiquidityTx = await router
     .connect(owner)
@@ -124,8 +129,20 @@ async function main() {
       deadline
     );
   await addLiquidityTx.wait();
+
+  // Check LP token balance for the owner
+  const lpTokenBalance = await pair.balanceOf(owner.address);
+  console.log(`LP tokens for the owner: ${lpTokenBalance.toString()}`);
+
   reserves = await pair.getReserves();
   console.log(`Reserves: ${reserves[0].toString()}, ${reserves[1].toString()}`);
+
+  console.log("USDT_ADDRESS", usdtAddress);
+  console.log("USDC_ADDRESS", usdcAddress);
+  console.log("WETH_ADDRESS", wethAddress);
+  console.log("FACTORY_ADDRESS", factoryAddress);
+  console.log("ROUTER_ADDRESS", routerAddress);
+  console.log("PAIR_ADDRESS", pairAddress);
 }
 
 // This command is used to run the script using hardhat.
